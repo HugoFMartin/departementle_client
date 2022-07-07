@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { BehaviorSubject, catchError, Observable, take } from "rxjs";
 import { Departement } from "../data/departement";
 import { HttpService } from "./httpService";
 
@@ -7,22 +8,24 @@ import { HttpService } from "./httpService";
 })
 export class DepartementService {
 
-    constructor(private httpService: HttpService){}
-
-    getDailyDepartement(): Promise<Departement> {
-        return new Promise((resolve, reject) => {
-            this.httpService.httpGet("/daily").then((data: any) => {
-                const departement = new Departement(data.name, data.img)
-                resolve(departement)
-            });
-        });   
+    constructor(private httpService: HttpService){
     }
 
-    getDepartementList() {
-        return new Promise((resolve, reject) => {
-            this.httpService.httpGet("/departements").then((data: any) => {
-                resolve(data)
-            });
-        });
+    getDailyDepartement(): Observable<any> {
+        return this.httpService.httpGet("/daily").pipe(
+            catchError(this.handleError)
+        ); 
     }
+
+    getDepartementList(): Observable<String[]>{
+        return this.httpService.httpGet("/departements").pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    private handleError(error: any, caught: Observable<any>): Observable<any> {
+        // TODO
+        return error;
+    }
+
 }
