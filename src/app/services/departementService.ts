@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, catchError, Observable, take } from "rxjs";
+import { BehaviorSubject, catchError, Observable, take, throwError } from "rxjs";
 import { Departement } from "../data/departement";
 import { HttpService } from "./httpService";
 
@@ -17,15 +17,20 @@ export class DepartementService {
         ); 
     }
 
-    getDepartementList(): Observable<String[]>{
+    getDepartementList(): Observable<string[]>{
         return this.httpService.httpGet("/departements").pipe(
             catchError(this.handleError)
         );
     }
 
+    guessDepartement(guessedDepartementName: string): Observable<string[]>{
+        return this.httpService.httpPost("/guess", guessedDepartementName).pipe(
+            catchError(this.handleError)
+        );
+    }
+
     private handleError(error: any, caught: Observable<any>): Observable<any> {
-        // TODO
-        return error;
+        return caught;
     }
 
 }

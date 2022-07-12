@@ -13,4 +13,8 @@ export class HttpService {
     httpGet(url: String): Observable<Object> {
         return this.http.get(this.baseUrl + url);
     }
+
+    httpPost(url:String, data:any) {
+        return this.http.post(this.baseUrl + url,data)
+    }
 }
