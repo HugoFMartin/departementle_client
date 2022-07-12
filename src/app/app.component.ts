@@ -11,8 +11,10 @@ import { Observable, of } from 'rxjs';
 export class AppComponent implements OnInit {
   title = 'departementle_client';
 
-  dailyDepartement: Departement | null = null;
-  departementList: String[] = [];
+  dailyDepartement: Departement = new Departement('','')
+  departementList: string[] = [];
+  tries: any[] = [];
+  guessSucceed: boolean = false;
 
   constructor(private departementService: DepartementService) {
   }
@@ -25,10 +27,22 @@ export class AppComponent implements OnInit {
       }
     );
 
-    this.departementService.getDailyDepartement().subscribe(
-      (departementList: String[]) => {
+    this.departementService.getDepartementList().subscribe(
+      (departementList: string[]) => {
         this.departementList = departementList;
       }
     );
   }
+
+  onDepartementGuess = (guessDepartement: string) => {
+    this.tries.push({departementName: guessDepartement})
+    this.departementService.guessDepartement(guessDepartement).subscribe(
+      (respond) => {
+        if(respond) {
+          this.guessSucceed = true;
+        }
+      }
+    )
+  }
+  
 }
