@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
 
     this.departementService.getDailyDepartement().subscribe(
       (response: any) => {
-        this.isNewDay(response.date);
+        this.isNewDay(response.id);
         this.dailyDepartement = new Departement(response.departement.name, response.departement.img);
       }
     );
@@ -48,12 +48,12 @@ export class AppComponent implements OnInit {
   onDepartementGuess = (guessDepartement: string) => {
     this.departementService.guessDepartement(guessDepartement).subscribe(
       (response: any) => {
-        if (this.isNewDay(response.date)) {
+        if (this.isNewDay(response.id)) {
           // TODO force refresh
         } else {
           if(response.isValid){
             this.guessSucceed = true;
-            this.localStorage.setGuessed();
+            this.localStorage.setGuessed(response.id);
             // TODO handle win
           } 
           this.localStorage.saveGuess(new Guess(
@@ -79,12 +79,12 @@ export class AppComponent implements OnInit {
     }
   }
   
-  private isNewDay(date: number): boolean {
-    const currentDay = this.localStorage.getDate()
+  private isNewDay(id: number): boolean {
+    const currentDay = this.localStorage.getId()
     // New day, reset local storage guesses
-    if (!currentDay || currentDay != date) {
+    if (!currentDay || currentDay != id) {
       this.localStorage.resetDailyState();
-      this.localStorage.setDate(date);
+      this.localStorage.setId(id);
       return true;
     }
     return false;
