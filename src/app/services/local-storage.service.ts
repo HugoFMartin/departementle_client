@@ -10,7 +10,8 @@ export class LocalStorageService {
   private keys = {
     dailyGuessesKey: "daily_guess",
     dailyguessedKey: "daily_guessed",
-    dateKey: "date"
+    idKey: "id",
+    statsKey: "stats"
   }
   private dailyGuesses: Guess[]= [];
   
@@ -29,28 +30,36 @@ export class LocalStorageService {
       []
   }
 
-  public setGuessed() {
-    localStorage.setItem(this.keys.dailyguessedKey, JSON.stringify(true));
+  public setGuessed(state: boolean) {
+    localStorage.setItem(this.keys.dailyguessedKey, JSON.stringify(state));
   }
 
   public getIsGuessed(): boolean {
     return JSON.parse(localStorage.getItem(this.keys.dailyguessedKey)!!)
   }
 
-  public setDate(date: number) {
-    localStorage.setItem(this.keys.dateKey, JSON.stringify(date));
+  public setId(date: number) {
+    localStorage.setItem(this.keys.idKey, JSON.stringify(date));
   }
 
-  public getDate() {
-    return localStorage.getItem(this.keys.dateKey) ? 
-      JSON.parse(localStorage.getItem(this.keys.dateKey)!!) :
+  public getId() {
+    return localStorage.getItem(this.keys.idKey) ? 
+      JSON.parse(localStorage.getItem(this.keys.idKey)!!) :
       null
   }
 
   public resetDailyState() {
-    localStorage.setItem(this.keys.dailyguessedKey, JSON.stringify(false));
+    localStorage.setItem(this.keys.dailyguessedKey, JSON.stringify(null));
     localStorage.setItem(this.keys.dailyGuessesKey, JSON.stringify([]));
   }
 
-  // TODO stat
+  public getStats() {
+    return localStorage.getItem(this.keys.statsKey) ?
+      JSON.parse(localStorage.getItem(this.keys.statsKey)!!) : 
+      null
+  }
+
+  public updateStats() {
+    // TODO stat
+  }
 }
